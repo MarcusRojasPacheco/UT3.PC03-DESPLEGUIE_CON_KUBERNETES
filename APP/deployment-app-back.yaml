@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: back-pps-ale
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: back-pps-ale
+  template:
+    metadata:
+      labels:
+        app: back-pps-ale
+    spec:
+      containers:
+      - name: app-back
+        image: sunamylol/backend:v1
+        ports:
+        - containerPort: 7080
+          name: billingappbport

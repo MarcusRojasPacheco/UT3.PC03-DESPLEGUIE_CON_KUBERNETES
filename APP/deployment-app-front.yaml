@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-front-ale
+  template:
+    metadata:
+      labels:
+        app: app-front-ale
+    spec:
+      containers:
+      - name: app-front-ale
+        image: sunamylol/frontend:v1
+        ports:
+        - containerPort: 80
+          name: billingappfport

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgress
+  template:
+    metadata:
+      labels:
+        app: postgress
+    spec:
+      containers:
+      - name: postgress
+        image: postgres:13
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgress-secret
+              key: user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgress-secret
+              key: password
+        - name: POSTGRES_DB
+          value: billingapp_db
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: postgress-data
+          mountPath: /var/lib/postgresql/data
+        - name: postgress-initdb
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: postgress-data
+        persistentVolumeClaim:
+          claimName: postgress-pv-claim
+      - name: postgress-initdb
+        configMap:
+          name: postgress-initdb-config
+          items:
+          - key: postgres_init.sh
+            path: initdb.sh

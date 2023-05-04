@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-front-service
+  labels:
+    app: app-front-ale
+spec:
+  selector:
+    app: app-front-ale
+  ports:
+  - name: app-front-service
+    port: 80
+  type: NodePort
+
